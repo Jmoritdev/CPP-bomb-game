@@ -144,6 +144,7 @@ int main(int argc, char* args[]) {
 			//Update screen
 			SDL_RenderPresent(gRenderer);
 		}
+
 	}
 
 	//Free resources and close SDL

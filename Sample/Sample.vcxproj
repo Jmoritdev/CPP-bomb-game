@@ -124,7 +124,9 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityLiving.h" />
     <ClInclude Include="EntityInanimate.h" />
+    <ClInclude Include="EntityMoving.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="Prop.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Texture.h" />
