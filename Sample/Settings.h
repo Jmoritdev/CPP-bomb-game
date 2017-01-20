@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <iostream>
+
+
 class Entity;
 
 
@@ -12,8 +14,11 @@ private:
 
 	int screenWidth;
 	int screenHeight;
-	bool vSync;
+
+	//std::vector<Entity*>::iterator iterator;
 	std::vector<Entity*> entityList;
+
+	bool vSync;
 
 public:
 
@@ -22,6 +27,7 @@ public:
 		screenWidth = 640;
 		vSync = true;
 	}
+
 
 	int* getScreenWidth() {
 		return &screenWidth;
@@ -39,14 +45,6 @@ public:
 		screenHeight = height;
 	}
 
-	void toggleVSync() {
-		vSync = !vSync;
-	}
-
-	bool getVSync() {
-		return vSync;
-	}
-
 	void addEntity(Entity* entity) {
 		entityList.push_back(entity);
 	}
@@ -54,6 +52,24 @@ public:
 	std::vector<Entity*>* getEntities() {
 		return &entityList;
 	}
+
+	bool getVSync() {
+		return vSync;
+	}
+
+	void toggleVSync() {
+		vSync = !vSync;
+	}
+
+	//void removeEntity(Entity* entity) {
+	//	std::cout << "removing entity";
+
+	//	for (iterator = entityList.begin(); iterator != entityList.end(); ++iterator) {
+	//		
+	//	}
+
+	//	iterator = entityList.begin();
+	//}
 
 };
 

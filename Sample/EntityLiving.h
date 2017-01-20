@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EntityMoving.h"
+#include "Projectile.h"
 
 class EntityLiving : public EntityMoving{
 
@@ -8,8 +9,8 @@ protected:
 	
 	int health;
 
-	//The velocity of the entity
-	int velX, velY;
+	//keeps track of all the projectiles the player shot
+	std::vector<Entity*> projectileList;
 
 public:
 	static const int DEFAULT_HEALTH = 100;
@@ -31,43 +32,20 @@ public:
 		
 	}
 
-	void move() {
-		
-		//if you dont move, you dont have to do anything within this if statement
-		if (velX != 0) {
+	void shootBomb(int endPointX, int endPointY) {
+		int bombVelX = (endPointX - posX);
+		int bombVelY = (endPointY - posY);
 
-			//move left or right
-			posX += velX;
-			hitbox.x += velX;
-
-			//check for collision with borders  //getScreenWidth returns a pointer, so dereference before comparing
-			if ((posX < 0) || (posX + width > *(settings->getScreenWidth())) || isColliding()) {
-				//Move back
-				posX -= velX;
-				hitbox.x -= velX;
-			}
-
-		}
-
-		//if you dont move, you dont have to do anything within this if statement
-		if (velY != 0) {
-
-			//Move up or down
-			posY += velY;
-			hitbox.y += velY;
-
-			//check for collision with borders 	//same here for height
-			if ((posY < 0) || (posY + height > *(settings->getScreenHeight())) || isColliding()) {
-				//Move back
-				posY -= velY;
-				hitbox.y -= velY;
-			}
-
-		}
+		Entity* bomb = new Projectile("Sprites/bomb.bmp", renderer, settings, this, posX, posY, 20, 20, 5, 5);
+		settings->addEntity(bomb);
+		projectileList.push_back(bomb);
 	}
 
-	void shootBomb(int angle) {
-
+	std::vector<Entity*>* getProjectileList() {
+		if (projectileList.empty()) {
+			return NULL;
+		}
+		return &projectileList;
 	}
 
 

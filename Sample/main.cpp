@@ -103,14 +103,12 @@ int main(int argc, char* args[]) {
 
 		//Event handler
 		SDL_Event e;
-			
-		Player player = Player("Sprites/dot.bmp", gRenderer, &settings, 0, 0);
-		Enemy enemy = Enemy("Sprites/enemy.bmp", gRenderer, &settings, 200, 200);
-		Prop crate = Prop("Sprites/crate.bmp", gRenderer, &settings, 100, 100);
 
-		settings.addEntity(&player);
-		settings.addEntity(&enemy);
-		settings.addEntity(&crate);
+		Player* player = new Player("Sprites/dot.bmp", gRenderer, &settings, 0, 0);
+
+		settings.addEntity(player);
+		settings.addEntity(new Enemy("Sprites/enemy.bmp", gRenderer, &settings, 200, 200));
+		settings.addEntity(new Prop("Sprites/crate.bmp", gRenderer, &settings, 100, 100));
 
 		//preparing some pointers to use for looping in the game loop
 		std::vector<Entity*>::const_iterator iterator;
@@ -126,19 +124,19 @@ int main(int argc, char* args[]) {
 				}
 
 				//Handle input for the player
-				player.handleEvent(e);
+				player->handleEvent(e);
 			}
-
-			//Move the player
-			player.move();
 
 			//Clear screen
 			SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 			SDL_RenderClear(gRenderer);
 
-			//render everything
+			//move and render everything
 			for (iterator = pList->begin(); iterator != pList->end(); ++iterator) {
-				(*iterator)->render(gRenderer);
+				if ((*iterator)->canMove()) {
+					(*iterator)->move();
+				}
+				(*iterator)->render();
 			}		
 
 			//Update screen

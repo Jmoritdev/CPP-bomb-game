@@ -4,6 +4,7 @@
 #include <SDL_image.h>
 #include <string>
 #include <iostream>
+#include <algorithm>
 #include "Texture.h"
 #include "Settings.h"
 
@@ -18,6 +19,7 @@ protected:
 	int width, height;
 
 	Settings* settings;
+	SDL_Renderer* renderer;
 
 	SDL_Rect hitbox;
 
@@ -58,6 +60,7 @@ public:
 		hitbox.y = localY;
 
 		this->settings = settings;
+		this->renderer = renderer;
 
 		//Load texture
 		if (!texture.loadFromFile(texturePath, renderer)) {
@@ -70,17 +73,18 @@ public:
 	}
 
 	//Shows the dot on the screen
-	void render(SDL_Renderer* renderer) {
+	void render() {
 		//Show the dot
 		texture.render(posX, posY, renderer);
 	}
 
-	bool loadFromFile(std::string path, SDL_Renderer* renderer) {
+	bool loadFromFile(std::string path) {
 		return texture.loadFromFile(path, renderer);
 	}
 
 	void free() {
 		texture.free();
+		renderer = NULL;
 		settings = NULL;
 	}
 
@@ -91,7 +95,7 @@ public:
 		std::vector<Entity*>::const_iterator iterator;
 
 		//a pointer to a vector that stores pointers to all entities currently initialized
-		std::vector<Entity*>* pList = settings->getEntities();
+		std::vector<Entity*>* entityList = settings->getEntities();
 
 		//initialize the coordinates of the passed rectangle
 		int leftA, rightA, topA, bottomA;
@@ -101,12 +105,11 @@ public:
 		topA = getHitbox()->y;
 		bottomA = getHitbox()->y + getHitbox()->h;
 
-
 		//go through the list of entities
-		for (iterator = pList->begin(); iterator != pList->end(); ++iterator) {
-
-			//do not check yourself for collisions
-			if ((*iterator) != this) {
+		for (iterator = entityList->begin(); iterator != entityList->end(); ++iterator) {
+			
+									
+			if ((*iterator) != this && (*iterator)->getShooter() != this && this->getShooter() != (*iterator)){
 
 				SDL_Rect* hitboxB = (*iterator)->getHitbox();
 
@@ -131,59 +134,52 @@ public:
 				if (topA >= bottomB) {
 					continue;
 				}
+				
+				//std::cout << "colliding";
 
-				pList = NULL;
+				//this->explode();
+				//(*iterator)->explode();
+				entityList = NULL;
 				return true;
 
 			}
 		}
-
-		pList = NULL;
+		
+		entityList = NULL;
 		return false;
-		////The sides of the rectangles
-		//int leftA, leftB;
-		//int rightA, rightB;
-		//int topA, topB;
-		//int bottomA, bottomB;
-
-		////Calculate the sides of rect A
-		//leftA = a.x;
-		//rightA = a.x + a.w;
-		//topA = a.y;
-		//bottomA = a.y + a.h;
-
-		////Calculate the sides of rect B
-		//leftB = b.x;
-		//rightB = b.x + b.w;
-		//topB = b.y;
-		//bottomB = b.y + b.h;
-
-		//if (rightA <= leftB) {
-		//	return false;
-		//}
-
-		//if (leftA >= rightB) {
-		//	return false;
-		//}
-
-		//if (bottomA <= topB) {
-
-		//	return false;
-		//}
-
-		//if (topA >= bottomB) {
-		//	return false;
-		//}
-
-
-
-		//std::cout << "colliding!";
-		////If none of the sides from A are outside B
-		//return true;
 	}
 
 	SDL_Rect* getHitbox() {
 		return &hitbox;
+	}
+
+	virtual Entity* getShooter() {
+		return NULL;
+	}
+
+	virtual bool canMove() {
+		return false;
+	}
+
+	virtual void move() {}
+
+	virtual std::vector<Entity*>* getProjectileList() {
+		return NULL;
+	}
+
+	virtual void explode() {
+		std::cout << "Boom!";
+
+		std::vector<Entity*>::iterator iterator;
+		std::vector<Entity*>* entityList = settings->getEntities();
+
+		for (iterator = entityList->begin(); iterator != entityList->end(); ++iterator) {
+			if ((*iterator) == this) {
+				entityList->erase(iterator);
+				this->~Entity();
+				break;
+			}
+		}
 	}
 
 };
