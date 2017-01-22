@@ -112,7 +112,12 @@ int main(int argc, char* args[]) {
 
 		//preparing some pointers to use for looping in the game loop
 		std::vector<Entity*>::const_iterator iterator;
-		std::vector<Entity*>* pList = settings.getEntities();
+
+		//a pointer to a list with pointers of all entities
+		std::vector<Entity*>* entityList = settings.getEntities();
+
+		//a pointer to a list with pointers of all entities that are going to die
+		std::vector<Entity*>* toDieList = settings.getToDieList();
 
 		//While application is running
 		while (!quit) {
@@ -132,12 +137,23 @@ int main(int argc, char* args[]) {
 			SDL_RenderClear(gRenderer);
 
 			//move and render everything
-			for (iterator = pList->begin(); iterator != pList->end(); ++iterator) {
-				if ((*iterator)->canMove()) {
-					(*iterator)->move();
-				}
+			for (iterator = entityList->begin(); iterator != entityList->end(); ++iterator) {
+				(*iterator)->move();
 				(*iterator)->render();
-			}		
+			}
+
+			//remove everything from the entitylist that is on the deathlist
+			for (iterator = toDieList->begin(); iterator != toDieList->end(); ++iterator) {
+				std::vector<Entity*>::const_iterator itTemp = std::find(entityList->begin(), entityList->end(), (*iterator));
+				entityList->erase(itTemp);
+				toDieList->erase(iterator);
+				if (toDieList->empty()) {
+					break;
+				} 
+				iterator = toDieList->begin();
+			}
+
+			
 
 			//Update screen
 			SDL_RenderPresent(gRenderer);

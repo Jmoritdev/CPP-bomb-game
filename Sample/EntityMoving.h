@@ -60,9 +60,5 @@ public:
 
 		}
 	}
-
-	bool canMove() {
-		return true;
-	}
 };
 

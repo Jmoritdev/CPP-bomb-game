@@ -24,12 +24,14 @@ public:
 
 		
 
-		if (e.type == SDL_MOUSEBUTTONDOWN) {
-			int x, y;
-			SDL_GetMouseState(&x, &y);
-			std::cout << "clicked x:" << x;
-			std::cout << "clicked y:" << y;
-			shootBomb(x, y);
+		if (e.type == SDL_KEYDOWN && e.key.repeat == 0) {
+			//Adjust the velocity
+			switch (e.key.keysym.sym) {
+			case SDLK_UP: shootBomb(0); break;
+			case SDLK_DOWN: shootBomb(180); break;
+			case SDLK_LEFT: shootBomb(270); break;
+			case SDLK_RIGHT: shootBomb(90); break;
+			}
 		}
 
 		//If a key was pressed

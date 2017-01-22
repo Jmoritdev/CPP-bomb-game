@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EntityMoving.h"
+#include "Explosion.h"
 
 class Projectile : public EntityMoving {
 
@@ -30,9 +31,14 @@ public:
 
 	void explode() {
 		Entity::explode();
+		Explosion* explosion = new Explosion("Sprites/explosion1.bmp", renderer, settings, 100, posX, posY);
+		explosion->explode();
+		explosion = NULL;
 	}
 
-
+	bool isProjectile() {
+		return true;
+	}
 
 };
 

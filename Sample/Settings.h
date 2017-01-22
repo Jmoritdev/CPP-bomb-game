@@ -15,8 +15,10 @@ private:
 	int screenWidth;
 	int screenHeight;
 
-	//std::vector<Entity*>::iterator iterator;
 	std::vector<Entity*> entityList;
+
+	//this list keeps track of all the entity's that will have to die this frame;
+	std::vector<Entity*> toDieList;
 
 	bool vSync;
 
@@ -59,6 +61,14 @@ public:
 
 	void toggleVSync() {
 		vSync = !vSync;
+	}
+
+	std::vector<Entity*>* getToDieList() {
+		return &toDieList;
+	}
+
+	void addEntityToDie(Entity* entity) {
+		toDieList.push_back(entity);
 	}
 
 	//void removeEntity(Entity* entity) {

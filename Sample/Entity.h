@@ -107,8 +107,7 @@ public:
 
 		//go through the list of entities
 		for (iterator = entityList->begin(); iterator != entityList->end(); ++iterator) {
-			
-									
+								
 			if ((*iterator) != this && (*iterator)->getShooter() != this && this->getShooter() != (*iterator)){
 
 				SDL_Rect* hitboxB = (*iterator)->getHitbox();
@@ -134,11 +133,10 @@ public:
 				if (topA >= bottomB) {
 					continue;
 				}
-				
-				//std::cout << "colliding";
 
-				//this->explode();
-				//(*iterator)->explode();
+				if (this->isProjectile()) {
+					this->explode();
+				}
 				entityList = NULL;
 				return true;
 
@@ -157,10 +155,6 @@ public:
 		return NULL;
 	}
 
-	virtual bool canMove() {
-		return false;
-	}
-
 	virtual void move() {}
 
 	virtual std::vector<Entity*>* getProjectileList() {
@@ -168,18 +162,10 @@ public:
 	}
 
 	virtual void explode() {
-		std::cout << "Boom!";
+	}
 
-		std::vector<Entity*>::iterator iterator;
-		std::vector<Entity*>* entityList = settings->getEntities();
-
-		for (iterator = entityList->begin(); iterator != entityList->end(); ++iterator) {
-			if ((*iterator) == this) {
-				entityList->erase(iterator);
-				this->~Entity();
-				break;
-			}
-		}
+	virtual bool isProjectile() {
+		return false;
 	}
 
 };

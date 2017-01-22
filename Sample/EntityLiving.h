@@ -32,11 +32,21 @@ public:
 		
 	}
 
-	void shootBomb(int endPointX, int endPointY) {
-		int bombVelX = (endPointX - posX);
-		int bombVelY = (endPointY - posY);
+	void shootBomb(int angle) {
+		Entity* bomb = NULL;
 
-		Entity* bomb = new Projectile("Sprites/bomb.bmp", renderer, settings, this, posX, posY, 20, 20, 5, 5);
+		switch (angle) {
+			case 0:
+				bomb = new Projectile("Sprites/bomb.bmp", renderer, settings, this, posX, posY, 20, 20, 0, -15); break;
+			case 90:
+				bomb = new Projectile("Sprites/bomb.bmp", renderer, settings, this, posX, posY, 20, 20, 15, 0); break;
+			case 180:
+				bomb = new Projectile("Sprites/bomb.bmp", renderer, settings, this, posX, posY, 20, 20, 0, 15); break;
+			case 270:
+				bomb = new Projectile("Sprites/bomb.bmp", renderer, settings, this, posX, posY, 20, 20, -15, 0); break;
+			default:
+				bomb = new Projectile("Sprites/bomb.bmp", renderer, settings, this, posX, posY, 20, 20, 0, -15); break;
+		}
 		settings->addEntity(bomb);
 		projectileList.push_back(bomb);
 	}
