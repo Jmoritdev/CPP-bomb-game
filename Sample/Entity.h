@@ -107,8 +107,13 @@ public:
 
 		//go through the list of entities
 		for (iterator = entityList->begin(); iterator != entityList->end(); ++iterator) {
-								
-			if ((*iterator) != this && (*iterator)->getShooter() != this && this->getShooter() != (*iterator)){
+
+			//do not check yourself					
+			if ((*iterator) != this && 
+				//check if you are NOT (a border and the iterator a projectile), or the other way around
+				!((*iterator)->isProjectile() && this->isBorder() || ((*iterator)->isBorder() && this->isProjectile())) &&
+				//check if you are not the shooter of the projectile, or the other way around
+				(*iterator)->getShooter() != this && this->getShooter() != (*iterator)){
 
 				SDL_Rect* hitboxB = (*iterator)->getHitbox();
 
@@ -161,11 +166,22 @@ public:
 		return NULL;
 	}
 
-	virtual void explode() {
-	}
+	virtual void explode() {}
 
 	virtual bool isProjectile() {
 		return false;
+	}
+
+	virtual bool isBorder() {
+		return false;
+	}
+
+	virtual bool isProp() {
+		return false;
+	}
+
+	virtual bool collideWithBorder() {
+		return true;
 	}
 
 };

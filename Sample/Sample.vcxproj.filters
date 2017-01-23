@@ -56,5 +56,8 @@
     <ClInclude Include="Explosion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Border.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

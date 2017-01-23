@@ -69,8 +69,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>Dependencies\SDL2_image-2.0.1\include;Dependencies\SDL2_ttf-2.0.14\include;Dependencies\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
-    <LibraryPath>Dependencies\SDL2_image-2.0.1\lib\x86;Dependencies\SDL2_ttf-2.0.14\lib\x86;Dependencies\SDL2-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\Dependencies\SDL2_image-2.0.1\include;.\Dependencies\SDL2_ttf-2.0.14\include;.\Dependencies\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\Dependencies\SDL2_image-2.0.1\lib\x86;.\Dependencies\SDL2_ttf-2.0.14\lib\x86;.\Dependencies\SDL2-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -120,6 +120,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Border.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityLiving.h" />

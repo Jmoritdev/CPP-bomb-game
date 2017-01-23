@@ -25,10 +25,6 @@ public:
 
 	}
 
-	void explode() {
-		checkCollision();
-	}
-
 	Circle* getHitCircle() {
 		return &hitCircle;
 	}
@@ -70,8 +66,10 @@ public:
 
 				if (distanceSquared(hitCircle.x, hitCircle.y, cX, cY) < hitCircle.r * hitCircle.r) {
 					//This box and the circle have collided
-					std::cout << "added to death list";
-					settings->addEntityToDie(*iterator);
+					if (!((*iterator)->isBorder())) {
+						std::cout << "added to death list";
+						settings->addEntityToDie(*iterator);
+					}
 				}
 			}
 		}

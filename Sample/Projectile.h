@@ -32,12 +32,16 @@ public:
 	void explode() {
 		Entity::explode();
 		Explosion* explosion = new Explosion("Sprites/explosion1.bmp", renderer, settings, 100, posX, posY);
-		explosion->explode();
+		explosion->checkCollision();
 		explosion = NULL;
 	}
 
 	bool isProjectile() {
 		return true;
+	}
+
+	bool collideWithBorder() {
+		return false;
 	}
 
 };

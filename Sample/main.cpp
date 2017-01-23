@@ -2,6 +2,7 @@
 #include "Enemy.h"
 #include "Settings.h"
 #include "Prop.h"
+#include "Border.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdio.h>
@@ -104,11 +105,20 @@ int main(int argc, char* args[]) {
 		//Event handler
 		SDL_Event e;
 
-		Player* player = new Player("Sprites/dot.bmp", gRenderer, &settings, 0, 0);
+		//top border
+		settings.addEntity(new Border("./Sprites/borderTopBottom.bmp", gRenderer, &settings, 100, 100, 440, 1));
+		//bottom border
+		settings.addEntity(new Border("./Sprites/borderTopBottom.bmp", gRenderer, &settings, 100, 380, 440, 1));
+		//left border
+		settings.addEntity(new Border("./Sprites/borderLeftRight.bmp", gRenderer, &settings, 100, 100, 1, 280));
+		//right border
+		settings.addEntity(new Border("./Sprites/borderLeftRight.bmp", gRenderer, &settings, 540, 100, 1, 280));
+
+		Player* player = new Player("./Sprites/dot.bmp", gRenderer, &settings, 400, 300);
 
 		settings.addEntity(player);
-		settings.addEntity(new Enemy("Sprites/enemy.bmp", gRenderer, &settings, 200, 200));
-		settings.addEntity(new Prop("Sprites/crate.bmp", gRenderer, &settings, 100, 100));
+		settings.addEntity(new Enemy("./Sprites/enemy.bmp", gRenderer, &settings, 200, 200));
+		settings.addEntity(new Prop("./Sprites/crate.bmp", gRenderer, &settings, 100, 100));
 
 		//preparing some pointers to use for looping in the game loop
 		std::vector<Entity*>::const_iterator iterator;
@@ -138,21 +148,28 @@ int main(int argc, char* args[]) {
 
 			//move and render everything
 			for (iterator = entityList->begin(); iterator != entityList->end(); ++iterator) {
-				(*iterator)->move();
-				(*iterator)->render();
+				if (!(*iterator)->isBorder() || !(*iterator)->isProp()) {
+					(*iterator)->move();
+					(*iterator)->render();
+				}
 			}
 
-			//remove everything from the entitylist that is on the deathlist
+			//iterate over the deathlist
 			for (iterator = toDieList->begin(); iterator != toDieList->end(); ++iterator) {
+				//find the element in entitylist
 				std::vector<Entity*>::const_iterator itTemp = std::find(entityList->begin(), entityList->end(), (*iterator));
+				//free memory on the heap and remove the pointer in entityList
+				delete *itTemp;
 				entityList->erase(itTemp);
+
+				//erase the pointer from the deathlist
 				toDieList->erase(iterator);
+				
 				if (toDieList->empty()) {
 					break;
 				} 
 				iterator = toDieList->begin();
 			}
-
 			
 
 			//Update screen

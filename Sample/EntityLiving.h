@@ -37,15 +37,15 @@ public:
 
 		switch (angle) {
 			case 0:
-				bomb = new Projectile("Sprites/bomb.bmp", renderer, settings, this, posX, posY, 20, 20, 0, -15); break;
+				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, -15); break;
 			case 90:
-				bomb = new Projectile("Sprites/bomb.bmp", renderer, settings, this, posX, posY, 20, 20, 15, 0); break;
+				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 15, 0); break;
 			case 180:
-				bomb = new Projectile("Sprites/bomb.bmp", renderer, settings, this, posX, posY, 20, 20, 0, 15); break;
+				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, 15); break;
 			case 270:
-				bomb = new Projectile("Sprites/bomb.bmp", renderer, settings, this, posX, posY, 20, 20, -15, 0); break;
+				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, -15, 0); break;
 			default:
-				bomb = new Projectile("Sprites/bomb.bmp", renderer, settings, this, posX, posY, 20, 20, 0, -15); break;
+				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, -15); break;
 		}
 		settings->addEntity(bomb);
 		projectileList.push_back(bomb);
@@ -58,7 +58,9 @@ public:
 		return &projectileList;
 	}
 
-
+	bool collideWithBorder() {
+		return true;
+	}
 
 };
 
