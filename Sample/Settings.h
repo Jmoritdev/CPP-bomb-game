@@ -68,18 +68,11 @@ public:
 	}
 
 	void addEntityToDie(Entity* entity) {
-		toDieList.push_back(entity);
+		//check if the entity is already on the deathlist
+		if (std::find(toDieList.begin(), toDieList.end(), entity) == toDieList.end()) {
+			//if not on the list yet
+			toDieList.push_back(entity);
+		}
 	}
-
-	//void removeEntity(Entity* entity) {
-	//	std::cout << "removing entity";
-
-	//	for (iterator = entityList.begin(); iterator != entityList.end(); ++iterator) {
-	//		
-	//	}
-
-	//	iterator = entityList.begin();
-	//}
-
 };
 

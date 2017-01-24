@@ -22,8 +22,6 @@ public:
 	//Takes key presses and adjusts the dot's velocity
 	void handleEvent(SDL_Event& e) {
 
-		
-
 		if (e.type == SDL_KEYDOWN && e.key.repeat == 0) {
 			//Adjust the velocity
 			switch (e.key.keysym.sym) {
@@ -54,6 +52,24 @@ public:
 				case SDLK_d: velX -= DEFAULT_VELOCITY; break;
 			}
 		}
+	}
+
+	void shootBomb(int angle, int velocity = 15) {
+		Entity* bomb = NULL;
+
+		switch (angle) {
+		case 0:
+			bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, -velocity); break;
+		case 90:
+			bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, velocity, 0); break;
+		case 180:
+			bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, velocity); break;
+		case 270:
+			bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, -velocity, 0); break;
+		default:
+			bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, -velocity); break;
+		}
+		settings->addEntity(bomb);
 	}
 };
 

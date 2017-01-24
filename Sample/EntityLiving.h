@@ -9,8 +9,6 @@ protected:
 	
 	int health;
 
-	//keeps track of all the projectiles the player shot
-	std::vector<Entity*> projectileList;
 
 public:
 	static const int DEFAULT_HEALTH = 100;
@@ -32,31 +30,6 @@ public:
 		
 	}
 
-	void shootBomb(int angle) {
-		Entity* bomb = NULL;
-
-		switch (angle) {
-			case 0:
-				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, -15); break;
-			case 90:
-				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 15, 0); break;
-			case 180:
-				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, 15); break;
-			case 270:
-				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, -15, 0); break;
-			default:
-				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, -15); break;
-		}
-		settings->addEntity(bomb);
-		projectileList.push_back(bomb);
-	}
-
-	std::vector<Entity*>* getProjectileList() {
-		if (projectileList.empty()) {
-			return NULL;
-		}
-		return &projectileList;
-	}
 
 	bool collideWithBorder() {
 		return true;

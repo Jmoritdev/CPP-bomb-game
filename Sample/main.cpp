@@ -3,17 +3,24 @@
 #include "Settings.h"
 #include "Prop.h"
 #include "Border.h"
+#include "Timer.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdio.h>
 #include <string>
 #include <iostream>
 #include <vector>
+#include <random>
+#include <time.h>
 
 
 //Screen dimension constants
 static const int SCREEN_WIDTH = 640;
 static const int SCREEN_HEIGHT = 480;
+
+static const int SPAWN_INTERVAL_ENEMY = 3;
+static const int SPAWN_INTERVAL_CRATE = 2;
+static const int ENEMY_SHOOTING_INTERVAL = 2;
 
 //header file that stores global variables such as screen width etc.
 Settings settings;
@@ -32,9 +39,12 @@ SDL_Renderer* gRenderer = NULL;
 
 
 
+
 bool init() {
 	//Initialization flag
 	bool success = true;
+
+	srand(time(NULL));
 
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -67,13 +77,12 @@ bool init() {
 				//Initialize renderer color
 				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
-				//Initialize PNG loading
-				int imgFlags = IMG_INIT_PNG;
-				if (!(IMG_Init(imgFlags) & imgFlags)) {
-					printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+				if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
+					printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 					success = false;
 				}
 			}
+			
 		}
 	}
 
@@ -92,6 +101,104 @@ void close() {
 	SDL_Quit();
 }
 
+//setup the default crates, the borders, spawn the player etc..
+void setupDefault() {
+
+	//top border
+	settings.addEntity(new Border("./Sprites/borderTopBottom.bmp", gRenderer, &settings, 100, 100, 440, 1));
+	//bottom border
+	settings.addEntity(new Border("./Sprites/borderTopBottom.bmp", gRenderer, &settings, 100, 380, 440, 1));
+	//left border
+	settings.addEntity(new Border("./Sprites/borderLeftRight.bmp", gRenderer, &settings, 100, 100, 1, 280));
+	//right border
+	settings.addEntity(new Border("./Sprites/borderLeftRight.bmp", gRenderer, &settings, 540, 100, 1, 280));
+
+	settings.addEntity(new Prop("./Sprites/crate.bmp", gRenderer, &settings, 150, 150));
+
+	settings.addEntity(new Prop("./Sprites/crate.bmp", gRenderer, &settings, 320, 240));
+
+	settings.addEntity(new Prop("./Sprites/crate.bmp", gRenderer, &settings, 390, 150));
+
+	settings.addEntity(new Prop("./Sprites/crate.bmp", gRenderer, &settings, 420, 300));
+
+	settings.addEntity(new Prop("./Sprites/crate.bmp", gRenderer, &settings, 150, 300));
+
+}
+
+void spawnEnemy() {
+
+	std::random_device rd;     // only used once to initialise (seed) engine
+	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+	std::uniform_int_distribution<int> distributionX(120, 520); 
+	std::uniform_int_distribution<int> distributionY(120, 360); 
+	std::uniform_int_distribution<int> randomBool(0, 1); 
+
+
+	int randomX;
+	int randomY;
+
+	//should it be along the x axis (yes / no)
+	int isX = randomBool(rng);
+
+	//should it be along the top or bottom(yes / no)
+	int isTop = randomBool(rng);
+
+	//should it be left or right
+	int isLeft = randomBool(rng);
+
+
+	if (isX) {
+		randomX = distributionX(rng);
+		if (isTop) {
+			randomY = 1;
+		} else {
+			randomY = 459;
+		}
+	} else {
+		randomY = distributionY(rng);
+		if (isLeft) {
+			randomX = 1;
+		} else {
+			randomX = 619;
+		}
+	}
+
+	if (isX) {
+		if (isTop) {
+			std::cout << "\n Random X: " << randomX;
+			std::cout << "\n Random Y: " << randomY << std::endl;
+			settings.addEntity(new Enemy("./Sprites/enemy.bmp", gRenderer, &settings, 180, randomX, randomY, 20, 20, 0, 1));
+		} else {
+			std::cout << "\n Random X: " << randomX;
+			std::cout << "\n Random Y: " << randomY << std::endl;
+			settings.addEntity(new Enemy("./Sprites/enemy.bmp", gRenderer, &settings, 0, randomX, randomY, 20, 20, 0, -1));
+		}
+		
+	} else {
+		if (isLeft) {
+			std::cout << "\n Random X: " << randomX;
+			std::cout << "\n Random Y: " << randomY << std::endl;
+			settings.addEntity(new Enemy("./Sprites/enemy.bmp", gRenderer, &settings, 90, randomX, randomY, 20, 20, 1, 0));
+		} else {
+			std::cout << "\n Random X: " << randomX;
+			std::cout << "\n Random Y: " << randomY << std::endl;
+			settings.addEntity(new Enemy("./Sprites/enemy.bmp", gRenderer, &settings, 270, randomX, randomY, 20, 20, -1, 0));
+		}
+	}
+}
+
+void spawnCrate() {
+	std::random_device rd; // obtain a random number from hardware
+	std::mt19937 eng(rd()); // seed the generator
+	std::uniform_int_distribution<> distributionX(120, 530); // define the range
+	std::uniform_int_distribution<> distributionY(120, 370); // define the range
+
+	int randomX = distributionX(eng);
+	int randomY = distributionY(eng);
+
+	settings.addEntity(new Prop("./Sprites/crate.bmp", gRenderer, &settings, randomX, randomY, 20, 20));
+}
+
 int main(int argc, char* args[]) {
 	settings = Settings();
 
@@ -105,20 +212,11 @@ int main(int argc, char* args[]) {
 		//Event handler
 		SDL_Event e;
 
-		//top border
-		settings.addEntity(new Border("./Sprites/borderTopBottom.bmp", gRenderer, &settings, 100, 100, 440, 1));
-		//bottom border
-		settings.addEntity(new Border("./Sprites/borderTopBottom.bmp", gRenderer, &settings, 100, 380, 440, 1));
-		//left border
-		settings.addEntity(new Border("./Sprites/borderLeftRight.bmp", gRenderer, &settings, 100, 100, 1, 280));
-		//right border
-		settings.addEntity(new Border("./Sprites/borderLeftRight.bmp", gRenderer, &settings, 540, 100, 1, 280));
+		//setup default crates and the player
+		setupDefault();
 
 		Player* player = new Player("./Sprites/dot.bmp", gRenderer, &settings, 400, 300);
-
 		settings.addEntity(player);
-		settings.addEntity(new Enemy("./Sprites/enemy.bmp", gRenderer, &settings, 200, 200));
-		settings.addEntity(new Prop("./Sprites/crate.bmp", gRenderer, &settings, 100, 100));
 
 		//preparing some pointers to use for looping in the game loop
 		std::vector<Entity*>::const_iterator iterator;
@@ -129,8 +227,25 @@ int main(int argc, char* args[]) {
 		//a pointer to a list with pointers of all entities that are going to die
 		std::vector<Entity*>* toDieList = settings.getToDieList();
 
+		int frames = 0;
+		
+
+		std::cout << floor(540 / 1000);
+
 		//While application is running
 		while (!quit) {
+
+			++frames;
+
+			//I am not proud of this, but I couldn't think of anything better
+			if (frames % (SPAWN_INTERVAL_CRATE * 60) == 0) {
+				spawnCrate();
+			} 
+			if (frames % (SPAWN_INTERVAL_ENEMY * 60) == 0) {
+				spawnEnemy();
+			}
+			
+
 			//Handle events on queue
 			while (SDL_PollEvent(&e) != 0) {
 				//User requests quit
@@ -148,9 +263,10 @@ int main(int argc, char* args[]) {
 
 			//move and render everything
 			for (iterator = entityList->begin(); iterator != entityList->end(); ++iterator) {
-				if (!(*iterator)->isBorder() || !(*iterator)->isProp()) {
-					(*iterator)->move();
-					(*iterator)->render();
+				(*iterator)->move();
+				(*iterator)->render();
+				if ((*iterator)->isEnemy() && frames % (ENEMY_SHOOTING_INTERVAL * 60) == 0) {
+					(*iterator)->shootBomb();
 				}
 			}
 
@@ -158,6 +274,7 @@ int main(int argc, char* args[]) {
 			for (iterator = toDieList->begin(); iterator != toDieList->end(); ++iterator) {
 				//find the element in entitylist
 				std::vector<Entity*>::const_iterator itTemp = std::find(entityList->begin(), entityList->end(), (*iterator));
+
 				//free memory on the heap and remove the pointer in entityList
 				delete *itTemp;
 				entityList->erase(itTemp);
@@ -170,7 +287,6 @@ int main(int argc, char* args[]) {
 				} 
 				iterator = toDieList->begin();
 			}
-			
 
 			//Update screen
 			SDL_RenderPresent(gRenderer);
@@ -183,3 +299,4 @@ int main(int argc, char* args[]) {
 
 	return 0;
 }
+

@@ -31,7 +31,7 @@ public:
 
 	void explode() {
 		Entity::explode();
-		Explosion* explosion = new Explosion("Sprites/explosion1.bmp", renderer, settings, 100, posX, posY);
+		Explosion* explosion = new Explosion("Sprites/explosion1.bmp", renderer, settings, 50, posX, posY);
 		explosion->checkCollision();
 		explosion = NULL;
 	}
