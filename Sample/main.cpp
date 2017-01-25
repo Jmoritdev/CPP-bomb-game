@@ -12,15 +12,20 @@
 #include <vector>
 #include <random>
 #include <time.h>
+#include <SDL_ttf.h>
 
 
 //Screen dimension constants
 static const int SCREEN_WIDTH = 640;
 static const int SCREEN_HEIGHT = 480;
 
-static const int SPAWN_INTERVAL_ENEMY = 3;
+static const int SPAWN_INTERVAL_ENEMY = 2;
 static const int SPAWN_INTERVAL_CRATE = 2;
-static const int ENEMY_SHOOTING_INTERVAL = 2;
+
+static const int ENEMY_SHOOTING_INTERVAL = 1;
+
+static const int MAX_CRATES = 15;
+static const int MAX_ENEMIES = 6;
 
 //header file that stores global variables such as screen width etc.
 Settings settings;
@@ -37,6 +42,12 @@ SDL_Window* gWindow = NULL;
 //The window renderer
 SDL_Renderer* gRenderer = NULL;
 
+//the font
+TTF_Font *font = NULL;
+
+Texture scoreTexture;
+
+int killcount = 0;
 
 
 
@@ -80,9 +91,20 @@ bool init() {
 				if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
 					printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 					success = false;
+				} else {
+					//Initialize SDL_ttf
+					if (TTF_Init() == -1) {
+						printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+						success = false;
+					} else {
+						font = TTF_OpenFont("./Sprites/lazy.ttf", 28);
+						if (font == NULL) {
+							printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+							success = false;
+						}
+					}
 				}
 			}
-			
 		}
 	}
 
@@ -96,7 +118,12 @@ void close() {
 	gWindow = NULL;
 	gRenderer = NULL;
 
+	//Free global font
+	TTF_CloseFont(font);
+	font = NULL;
+
 	//Quit SDL subsystems
+	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
 }
@@ -227,10 +254,14 @@ int main(int argc, char* args[]) {
 		//a pointer to a list with pointers of all entities that are going to die
 		std::vector<Entity*>* toDieList = settings.getToDieList();
 
-		int frames = 0;
-		
+		//a pointer to a list with pointers of all entities that are going to live 
+		//(used for bombs that are shot while iterating over the entitylist)
+		std::vector<Entity*>* toAddList = settings.getToAddList();
 
-		std::cout << floor(540 / 1000);
+		int frames = 0;
+
+		//tracks the previous killcount to check if the killcount has changed
+		int previousKillCount = 0;
 
 		//While application is running
 		while (!quit) {
@@ -244,6 +275,7 @@ int main(int argc, char* args[]) {
 			if (frames % (SPAWN_INTERVAL_ENEMY * 60) == 0) {
 				spawnEnemy();
 			}
+																		       
 			
 
 			//Handle events on queue
@@ -274,6 +306,13 @@ int main(int argc, char* args[]) {
 			for (iterator = toDieList->begin(); iterator != toDieList->end(); ++iterator) {
 				//find the element in entitylist
 				std::vector<Entity*>::const_iterator itTemp = std::find(entityList->begin(), entityList->end(), (*iterator));
+				
+				if ((*iterator)->isPlayer()) {
+					quit = true;
+				}
+				if ((*iterator)->isEnemy()) {
+					killcount++;
+				}
 
 				//free memory on the heap and remove the pointer in entityList
 				delete *itTemp;
@@ -287,6 +326,24 @@ int main(int argc, char* args[]) {
 				} 
 				iterator = toDieList->begin();
 			}
+
+			//iterate over the toAddList
+			for (iterator = toAddList->begin(); iterator != toAddList->end(); ++iterator) {
+				settings.addEntity(*iterator);
+			}
+			toAddList->clear();
+			
+
+			//has the killcount changed
+			if (killcount != previousKillCount) {
+				
+				std::string killcountText = "Killcount: " + std::to_string(killcount);
+
+				//change the killcount text
+				scoreTexture.loadFromRenderedText(font, killcountText, { 0,0,0 }, gRenderer);
+				previousKillCount++;
+			}
+			
 
 			//Update screen
 			SDL_RenderPresent(gRenderer);

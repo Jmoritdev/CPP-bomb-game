@@ -33,22 +33,24 @@ public:
 	}
 
 	void shootBomb() {
-		Entity* bomb = NULL;
+		if (isShooting) {
+			Entity* bomb = NULL;
 
-		switch (shootingAngle) {
-		case 0:
-			bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, -10); break;
-		case 90:
-			bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 10, 0); break;
-		case 180:
-			bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, 10); break;
-		case 270:
-			bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, -10, 0); break;
-		default:
-			bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, -10); break;
+			switch (shootingAngle) {
+			case 0:
+				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, -10); break;
+			case 90:
+				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 10, 0); break;
+			case 180:
+				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, 10); break;
+			case 270:
+				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, -10, 0); break;
+			default:
+				bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, -10); break;
+			}
+
+			settings->addEntityToLive(bomb);
 		}
-		//BUG: entity added to entitylist while iterating over it at main.cpp in the game loop
-		settings->addEntity(bomb);
 	}
 };
 

@@ -126,5 +126,10 @@ public:
 		return false;
 	}
 
+	virtual bool isPlayer() {
+		return false;
+	}
+
+	virtual void startShooting() {}
 };
 

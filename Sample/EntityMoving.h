@@ -38,6 +38,9 @@ public:
 			//check for collision with borders  //getScreenWidth returns a pointer, so dereference before comparing
 			if ((posX < 0) || (posX + width > *(settings->getScreenWidth())) || isColliding()) {
 				
+				//does nothing unless 'this' is an enemy
+				this->startShooting();
+
 				if (this->isProjectile()) {
 					settings->addEntityToDie(this);
 				}
@@ -57,7 +60,10 @@ public:
 
 			//check for collision with borders 	//same here for height
 			if ((posY < 0) || (posY + height > *(settings->getScreenHeight())) || isColliding()) {
-				
+
+				//does nothing unless 'this' is an enemy
+				this->startShooting();
+
 				if (this->isProjectile()) {
 					settings->addEntityToDie(this);
 				}

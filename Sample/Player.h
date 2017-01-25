@@ -19,6 +19,10 @@ public:
 		Entity::free();
 	}
 
+	bool isPlayer() {
+		return true;
+	}
+
 	//Takes key presses and adjusts the dot's velocity
 	void handleEvent(SDL_Event& e) {
 
