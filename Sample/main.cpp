@@ -333,17 +333,16 @@ int main(int argc, char* args[]) {
 			}
 			toAddList->clear();
 			
-
 			//has the killcount changed
 			if (killcount != previousKillCount) {
-				
-				std::string killcountText = "Killcount: " + std::to_string(killcount);
 
 				//change the killcount text
+				std::string killcountText = "Killcount: " + std::to_string(killcount);
+				
 				scoreTexture.loadFromRenderedText(font, killcountText, { 0,0,0 }, gRenderer);
 				previousKillCount++;
 			}
-			
+			scoreTexture.render(450, 20, gRenderer);
 
 			//Update screen
 			SDL_RenderPresent(gRenderer);
