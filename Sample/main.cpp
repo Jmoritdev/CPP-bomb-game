@@ -3,7 +3,6 @@
 #include "Settings.h"
 #include "Prop.h"
 #include "Border.h"
-#include "Timer.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdio.h>
@@ -192,23 +191,15 @@ void spawnEnemy() {
 
 	if (isX) {
 		if (isTop) {
-			std::cout << "\n Random X: " << randomX;
-			std::cout << "\n Random Y: " << randomY << std::endl;
 			settings.addEntity(new Enemy("./Sprites/enemy.bmp", gRenderer, &settings, 180, randomX, randomY, 20, 20, 0, 1));
 		} else {
-			std::cout << "\n Random X: " << randomX;
-			std::cout << "\n Random Y: " << randomY << std::endl;
 			settings.addEntity(new Enemy("./Sprites/enemy.bmp", gRenderer, &settings, 0, randomX, randomY, 20, 20, 0, -1));
 		}
 		
 	} else {
 		if (isLeft) {
-			std::cout << "\n Random X: " << randomX;
-			std::cout << "\n Random Y: " << randomY << std::endl;
 			settings.addEntity(new Enemy("./Sprites/enemy.bmp", gRenderer, &settings, 90, randomX, randomY, 20, 20, 1, 0));
 		} else {
-			std::cout << "\n Random X: " << randomX;
-			std::cout << "\n Random Y: " << randomY << std::endl;
 			settings.addEntity(new Enemy("./Sprites/enemy.bmp", gRenderer, &settings, 270, randomX, randomY, 20, 20, -1, 0));
 		}
 	}

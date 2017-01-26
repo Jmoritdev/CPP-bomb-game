@@ -67,7 +67,6 @@ public:
 				if (distanceSquared(hitCircle.x, hitCircle.y, cX, cY) < hitCircle.r * hitCircle.r) {
 					//This box and the circle have collided
 					if (!((*iterator)->isBorder())) {
-						std::cout << "added to death list";
 						settings->addEntityToDie(*iterator);
 					}
 				}

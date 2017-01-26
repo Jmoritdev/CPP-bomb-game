@@ -72,6 +72,10 @@
     <IncludePath>.\Dependencies\SDL2_image-2.0.1\include;.\Dependencies\SDL2_ttf-2.0.14\include;.\Dependencies\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
     <LibraryPath>.\Dependencies\SDL2_image-2.0.1\lib\x86;.\Dependencies\SDL2_ttf-2.0.14\lib\x86;.\Dependencies\SDL2-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Users\jmmt0\Source\Repos\Sample\Sample\Dependencies\SDL2_image-2.0.1\include;C:\Users\jmmt0\Source\Repos\Sample\Sample\Dependencies\SDL2_ttf-2.0.14\include;C:\Users\jmmt0\Source\Repos\Sample\Sample\Dependencies\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\jmmt0\Source\Repos\Sample\Sample\Dependencies\SDL2_image-2.0.1\lib\x86;C:\Users\jmmt0\Source\Repos\Sample\Sample\Dependencies\SDL2_ttf-2.0.14\lib\x86;C:\Users\jmmt0\Source\Repos\Sample\Sample\Dependencies\SDL2-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -89,6 +93,9 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>SDL2_image.lib;SDL2.lib;SDL2_ttf.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -132,7 +139,6 @@
     <ClInclude Include="Prop.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
