@@ -46,7 +46,7 @@ If it doesn't, please check if your virus scanner doesn't block anything.
 
 # Controls
 
-WASD to move
+WASD to move. <br>
 Arrow keys to shoot a bomb.
 
 # Contact
