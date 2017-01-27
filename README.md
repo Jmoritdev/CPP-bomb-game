@@ -10,7 +10,18 @@ and followed this (http://lazyfoo.net/tutorials/SDL/index.php) tutorial for work
 I also used a header from this tutorial such as Texture.h and bits and pieces of code such as the collision detection and basic movement. 
 Everything else was made entirely by me.
 
-# How to run this game in visual studio (2015)
+# How to run this game in visual studio (2015) from a ZIP file
+
+Extract it.
+
+Open the project in visual studio.
+
+All settings should be correct from the start. If not, follow the installation instructions below.
+
+Now run the project in Debug x86 mode and it should run fine. 
+If it doesn't, please check if your virus scanner doesn't block anything.
+
+# How to run this game in visual studio (2015) from Github
 
 Clone it in visual studio from this link: https://github.com/Jmoritdev/Sample.git
 
