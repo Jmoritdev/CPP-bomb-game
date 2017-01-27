@@ -44,6 +44,11 @@ Click "Apply".
 Now run the project in Debug x86 mode and it should run fine. 
 If it doesn't, please check if your virus scanner doesn't block anything.
 
+# Controls
+
+WASD to move
+Arrow keys to shoot a bomb.
+
 # Contact
 
 For questions please email: z.jmorit@gmail.com
