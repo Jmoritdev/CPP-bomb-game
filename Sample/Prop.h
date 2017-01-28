@@ -11,7 +11,6 @@ public:
 
 	}
 
-
 	bool isProp() {
 		return true;
 	}

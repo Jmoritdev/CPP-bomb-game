@@ -6,7 +6,7 @@
 #include <iostream>
 #include <SDL_ttf.h>
 
-
+//used from the tutorial (http://lazyfoo.net/tutorials/SDL/index.php) and edited to work in a seperate class 
 class Texture {
 
 private:
@@ -33,14 +33,7 @@ public:
 		free();
 	}
 	
-	/**
-	*  \brief Load image from path using renderer
-	*
-	*  \param path The path to the image
-	*  \param renderer The renderer
-	*
-	*  \return true if the image was loaded successfully  
-	*/
+	
 	bool loadFromFile(std::string path, SDL_Renderer* renderer) {
 		//Get rid of preexisting texture
 		free();

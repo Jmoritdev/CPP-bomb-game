@@ -6,33 +6,26 @@ class Player : public EntityLiving{
 
 public:
 
-	Player() : EntityLiving() {}
-
 	Player(std::string texturePath, SDL_Renderer* renderer, Settings* settings, int localX = DEFAULT_POS, int localY = DEFAULT_POS, 
-		int width = DEFAULT_SIZE, int height = DEFAULT_SIZE, int localVelX = 0, int localVelY = 0, int health = DEFAULT_HEALTH) :
-
-		EntityLiving(texturePath, renderer, settings, localX, localY, width, height, localVelX, localVelY, health)
-
-	{}
-
-	~Player() {
-		Entity::free();
+		int width = DEFAULT_SIZE, int height = DEFAULT_SIZE, int localVelX = 0, int localVelY = 0) :
+		EntityLiving(texturePath, renderer, settings, localX, localY, width, height, localVelX, localVelY){
+	
 	}
 
 	bool isPlayer() {
 		return true;
 	}
 
-	//Takes key presses and adjusts the dot's velocity
+	//Takes key presses and adjusts the velocity
 	void handleEvent(SDL_Event& e) {
 
+		//shoot bombs
 		if (e.type == SDL_KEYDOWN && e.key.repeat == 0) {
-			//Adjust the velocity
 			switch (e.key.keysym.sym) {
-			case SDLK_UP: shootBomb(0); break;
-			case SDLK_DOWN: shootBomb(180); break;
-			case SDLK_LEFT: shootBomb(270); break;
-			case SDLK_RIGHT: shootBomb(90); break;
+				case SDLK_UP: shootBomb(0); break;
+				case SDLK_DOWN: shootBomb(180); break;
+				case SDLK_LEFT: shootBomb(270); break;
+				case SDLK_RIGHT: shootBomb(90); break;
 			}
 		}
 
@@ -46,6 +39,7 @@ public:
 				case SDLK_d: velX += DEFAULT_VELOCITY; break;
 			}
 		}
+
 		//If a key was released
 		else if (e.type == SDL_KEYUP && e.key.repeat == 0) {
 			//Adjust the velocity
@@ -73,6 +67,7 @@ public:
 		default:
 			bomb = new Projectile("./Sprites/bomb.bmp", renderer, settings, this, posX, posY, 13, 18, 0, -velocity); break;
 		}
+
 		settings->addEntity(bomb);
 	}
 };

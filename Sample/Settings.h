@@ -1,10 +1,9 @@
 #pragma once
 
-
 #include <vector>
 #include <iostream>
 
-
+//normally including Entity caused some weird bugs, but this somehow fixed it.
 class Entity;
 
 
@@ -22,7 +21,7 @@ private:
 
 	//this list keeps track of all the entity's that will have to be added to the main entitylist, but can't right now
 	//the program is for example iterating over the entitylist
-	std::vector<Entity*> toAddList;
+	std::vector<Entity*> toLiveList;
 
 	bool vSync;
 
@@ -33,7 +32,6 @@ public:
 		screenWidth = 640;
 		vSync = true;
 	}
-
 
 	int* getScreenWidth() {
 		return &screenWidth;
@@ -72,7 +70,7 @@ public:
 	}
 
 	std::vector<Entity*>* getToAddList() {
-		return &toAddList;
+		return &toLiveList;
 	}
 
 	void addEntityToDie(Entity* entity) {
@@ -84,10 +82,10 @@ public:
 	}
 
 	void addEntityToLive(Entity* entity) {
-		//check if the entity is already on the deathlist
-		if (std::find(toAddList.begin(), toAddList.end(), entity) == toAddList.end()) {
+		//check if the entity is already on the toLiveList
+		if (std::find(toLiveList.begin(), toLiveList.end(), entity) == toLiveList.end()) {
 			//if not on the list yet
-			toAddList.push_back(entity);
+			toLiveList.push_back(entity);
 		}
 	}
 };

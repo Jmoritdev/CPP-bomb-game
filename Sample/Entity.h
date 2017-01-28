@@ -33,7 +33,7 @@ public:
 	static const int DEFAULT_POS = 0;
 
 	Entity() {
-		//Initialize the offsets
+		
 		posX = DEFAULT_POS;
 		posY = DEFAULT_POS;
 
@@ -47,7 +47,7 @@ public:
 	Entity(std::string texturePath, SDL_Renderer* renderer, Settings* settings, int localX = DEFAULT_POS, int localY = DEFAULT_POS, 
 		   int width = DEFAULT_SIZE, int height = DEFAULT_SIZE) {
 
-		//Initialize the offsets
+		
 		posX = localX;
 		posY = localY;
 
@@ -92,17 +92,21 @@ public:
 		return &hitbox;
 	}
 
+	//****
+	//Below are some virtual functions that enable us to check the derived class through a function of the base class, 
+	//and call its functions if they are defined here.
+	//****
 	virtual Entity* getShooter() {
 		return NULL;
 	}
 
 	virtual void move() {}
 
-	virtual std::vector<Entity*>* getProjectileList() {
-		return NULL;
-	}
-
 	virtual void explode() {}
+
+	virtual void shootBomb() {}
+
+	virtual void startShooting() {}
 
 	virtual bool isProjectile() {
 		return false;
@@ -120,8 +124,6 @@ public:
 		return true;
 	}
 
-	virtual void shootBomb() {}
-
 	virtual bool isEnemy() {
 		return false;
 	}
@@ -129,7 +131,5 @@ public:
 	virtual bool isPlayer() {
 		return false;
 	}
-
-	virtual void startShooting() {}
 };
 

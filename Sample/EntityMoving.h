@@ -9,10 +9,7 @@ protected:
 	int velX, velY;
 
 public:
-
-	EntityMoving() {
-
-	}
+	static const int DEFAULT_VELOCITY = 10;
 
 	EntityMoving(std::string texturePath, SDL_Renderer* renderer, Settings* settings, int localX = DEFAULT_POS, int localY = DEFAULT_POS,
 		int width = DEFAULT_SIZE, int height = DEFAULT_SIZE, int localVelX = 0, int localVelY = 0) :
@@ -21,9 +18,6 @@ public:
 		this->velX = localVelX;
 		this->velY = localVelY;
 
-	}
-
-	~EntityMoving() {
 	}
 
 	void move() {

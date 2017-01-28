@@ -8,6 +8,8 @@ protected:
 
 	struct Circle {
 		int x, y;
+
+		//radius
 		int r;
 	};
 
@@ -29,7 +31,7 @@ public:
 		return &hitCircle;
 	}
 
-	//checks all entities to see if they are within the blastzone, if they are, they are going to die
+	//checks all entities to see if they are within the blastzone, entity's except borders within the blast zone will die
 	void checkCollision() {
 		//a constant iterator for a vector that stores pointers to entitys
 		std::vector<Entity*>::const_iterator iterator;
@@ -38,35 +40,35 @@ public:
 		std::vector<Entity*>* entityList = settings->getEntities();
 
 		for (iterator = entityList->begin(); iterator != entityList->end(); ++iterator) {
+			if (!((*iterator)->isBorder())) {
 
-			SDL_Rect* hitbox= (*iterator)->getHitbox();
+				SDL_Rect* hitbox= (*iterator)->getHitbox();
 
-			if ((*iterator) != this) {
+				if ((*iterator) != this) {
 
-				//Closest point on collision box
-				int cX, cY;
+					//Closest point on collision box
+					int cX, cY;
 
-				//Find closest x offset
-				if (hitCircle.x < hitbox->x) {
-					cX = hitbox->x;
-				} else if (hitCircle.x > hitbox->x + hitbox->w) {
-					cX = hitbox->x + hitbox->w;
-				} else {
-					cX = hitCircle.x;
-				}
+					//Find closest x offset
+					if (hitCircle.x < hitbox->x) {
+						cX = hitbox->x;
+					} else if (hitCircle.x > hitbox->x + hitbox->w) {
+						cX = hitbox->x + hitbox->w;
+					} else {
+						cX = hitCircle.x;
+					}
 
-				//Find closest y offset
-				if (hitCircle.y < hitbox->y) {
-					cY = hitbox->y;
-				} else if (hitCircle.y > hitbox->y + hitbox->h) {
-					cY = hitbox->y + hitbox->h;
-				} else {
-					cY = hitCircle.y;
-				}
+					//Find closest y offset
+					if (hitCircle.y < hitbox->y) {
+						cY = hitbox->y;
+					} else if (hitCircle.y > hitbox->y + hitbox->h) {
+						cY = hitbox->y + hitbox->h;
+					} else {
+						cY = hitCircle.y;
+					}
 
-				if (distanceSquared(hitCircle.x, hitCircle.y, cX, cY) < hitCircle.r * hitCircle.r) {
-					//This box and the circle have collided
-					if (!((*iterator)->isBorder())) {
+					if (distanceSquared(hitCircle.x, hitCircle.y, cX, cY) < hitCircle.r * hitCircle.r) {
+						//This box and the circle have collided
 						settings->addEntityToDie(*iterator);
 					}
 				}

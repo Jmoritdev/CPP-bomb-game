@@ -54,8 +54,6 @@ bool init() {
 	//Initialization flag
 	bool success = true;
 
-	srand(time(NULL));
-
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
@@ -67,7 +65,7 @@ bool init() {
 		}
 
 		//Create window
-		gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
+		gWindow = SDL_CreateWindow("Sample (For the lack of a better name)", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
 									*settings.getScreenWidth(), *settings.getScreenHeight(), SDL_WINDOW_SHOWN);
 		if (gWindow == NULL) {
 			printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
@@ -247,7 +245,7 @@ int main(int argc, char* args[]) {
 
 		//a pointer to a list with pointers of all entities that are going to live 
 		//(used for bombs that are shot while iterating over the entitylist)
-		std::vector<Entity*>* toAddList = settings.getToAddList();
+		std::vector<Entity*>* toLiveList = settings.getToAddList();
 
 		int frames = 0;
 
@@ -318,11 +316,11 @@ int main(int argc, char* args[]) {
 				iterator = toDieList->begin();
 			}
 
-			//iterate over the toAddList
-			for (iterator = toAddList->begin(); iterator != toAddList->end(); ++iterator) {
+			//iterate over the toLiveList
+			for (iterator = toLiveList->begin(); iterator != toLiveList->end(); ++iterator) {
 				settings.addEntity(*iterator);
 			}
-			toAddList->clear();
+			toLiveList->clear();
 			
 			//has the killcount changed
 			if (killcount != previousKillCount) {

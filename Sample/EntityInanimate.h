@@ -14,9 +14,5 @@ public:
 	EntityInanimate() : Entity(){
 		
 	}
-
-	virtual void explode() {
-		std::cout << "Hello, I am a placeholder";
-	}
 };
 
