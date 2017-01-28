@@ -32,6 +32,7 @@ public:
 	}
 
 	//checks all entities to see if they are within the blastzone, entity's except borders within the blast zone will die
+	//used from the tutorial (http://lazyfoo.net/tutorials/SDL/index.php) but edited to work with my own code
 	void checkCollision() {
 		//a constant iterator for a vector that stores pointers to entitys
 		std::vector<Entity*>::const_iterator iterator;

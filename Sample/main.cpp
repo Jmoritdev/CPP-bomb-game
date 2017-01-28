@@ -18,22 +18,14 @@
 static const int SCREEN_WIDTH = 640;
 static const int SCREEN_HEIGHT = 480;
 
+//in seconds
 static const int SPAWN_INTERVAL_ENEMY = 2;
 static const int SPAWN_INTERVAL_CRATE = 2;
 
 static const int ENEMY_SHOOTING_INTERVAL = 1;
 
-static const int MAX_CRATES = 15;
-static const int MAX_ENEMIES = 6;
-
 //header file that stores global variables such as screen width etc.
 Settings settings;
-
-//Starts up SDL and creates window
-bool init();
-
-//Frees media and shuts down SDL
-void close();
 
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
@@ -49,7 +41,7 @@ Texture scoreTexture;
 int killcount = 0;
 
 
-
+//Starts up SDL and creates window
 bool init() {
 	//Initialization flag
 	bool success = true;
@@ -94,7 +86,7 @@ bool init() {
 						printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
 						success = false;
 					} else {
-						font = TTF_OpenFont("./Sprites/lazy.ttf", 28);
+						font = TTF_OpenFont("./Sprites/font.ttf", 28);
 						if (font == NULL) {
 							printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
 							success = false;
@@ -150,13 +142,12 @@ void setupDefault() {
 }
 
 void spawnEnemy() {
-
-	std::random_device rd;     // only used once to initialise (seed) engine
-	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+	
+	std::random_device rd;
+	std::mt19937 rng(rd());
 	std::uniform_int_distribution<int> distributionX(120, 520); 
 	std::uniform_int_distribution<int> distributionY(120, 360); 
 	std::uniform_int_distribution<int> randomBool(0, 1); 
-
 
 	int randomX;
 	int randomY;
@@ -164,7 +155,7 @@ void spawnEnemy() {
 	//should it be along the x axis (yes / no)
 	int isX = randomBool(rng);
 
-	//should it be along the top or bottom(yes / no)
+	//should it be along the top or bottom (yes / no)
 	int isTop = randomBool(rng);
 
 	//should it be left or right
@@ -258,14 +249,13 @@ int main(int argc, char* args[]) {
 			++frames;
 
 			//I am not proud of this, but I couldn't think of anything better
+			//this code works correctly only if the fps is ~60
 			if (frames % (SPAWN_INTERVAL_CRATE * 60) == 0) {
 				spawnCrate();
 			} 
 			if (frames % (SPAWN_INTERVAL_ENEMY * 60) == 0) {
 				spawnEnemy();
 			}
-																		       
-			
 
 			//Handle events on queue
 			while (SDL_PollEvent(&e) != 0) {

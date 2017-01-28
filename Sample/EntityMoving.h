@@ -20,6 +20,7 @@ public:
 
 	}
 
+	//used from the tutorial (http://lazyfoo.net/tutorials/SDL/index.php) and edited to work with my own code
 	void move() {
 
 		//if you dont move, you dont have to do anything within this if statement
@@ -70,6 +71,8 @@ public:
 	}
 
 	//this function brute force checks all entities in the game for collision.
+	//the base of this code was used from the tutorial (http://lazyfoo.net/tutorials/SDL/index.php), 
+	//but most of it is edited to work with my code
 	bool isColliding() {
 
 		//a constant iterator for a vector that stores pointers to entitys
